@@ -1,0 +1,14 @@
+{
+  "timestamp_range": "6.0s — 6.1s",
+  "primary_anomaly": "IMU_CLIPPING",
+  "cited_evidence": [
+    "6.0 VIBE.VibeZ = 50.0 m/s² (threshold 45.0)",
+    "6.0 VIBE.Clip0 = 3 (threshold 0)",
+    "6.1 VIBE.VibeZ = 55.0 m/s² (threshold 45.0)",
+    "6.1 VIBE.Clip0 = 5 (threshold 0)"
+  ],
+  "root_cause_analysis": "DIAGNOSTIC INCONCLUSIVE: Insufficient data to determine root cause. A transient mechanical shock event occurred, producing Z-axis vibration exceeding the 45.0 m/s² threshold and triggering IMU clipping. However, no correlating changes in motor outputs (RCOU) or battery current (BAT.Curr) are observed at the time of the spike, ruling out propulsion-induced or power-delivery causes. The lack of additional sensor data (e.g., altitude, GPS, flight mode) prevents identifying the specific source of the impact (hard landing, propeller strike, debris, etc.).",
+  "actionable_fix": "Inspect airframe for physical damage (propellers, arms, landing gear). Verify IMU isolation mount integrity. Review full flight log (including altitude and control mode) for context around the event.",
+  "confidence_score": "Inconclusive",
+  "anomaly_type": "IMU_CLIP_VIBE.Clip0"
+}

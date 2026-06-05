@@ -1,0 +1,12 @@
+{
+  "timestamp_range": "6.0s — 6.1s",
+  "primary_anomaly": "IMU_CLIP_VIBE.Clip0",
+  "cited_evidence": [
+    "6.0 VIBE.VibeZ = 50.0 m/s², VIBE.Clip0 = 3",
+    "6.1 VIBE.VibeZ = 55.0 m/s², VIBE.Clip0 = 5"
+  ],
+  "root_cause_analysis": "DIAGNOSTIC INCONCLUSIVE: Insufficient data to determine root cause. The vibration spike is isolated to the Z-axis and accompanied by IMU clipping, but there is no correlated change in motor outputs (RCOU), current (BAT.Curr), or voltage (BAT.Volt) at the time of the event. This pattern rules out a propulsion or power-delivery fault. The most plausible explanation is an external mechanical shock (e.g., aerodynamic buffeting, gust, or impact) or a loose airframe component, but the available telemetry does not include environmental or structural data to confirm the specific cause.",
+  "actionable_fix": "Inspect airframe for loose components, check propeller balance, review flight video or external logs for collision evidence. Also note the battery voltage (22.5V) is critically low for a 12S LiPo (min safe 39.6V); verify battery configuration and state of charge before next flight.",
+  "confidence_score": "Inconclusive",
+  "anomaly_type": "IMU_CLIP_VIBE.Clip0"
+}

@@ -1,0 +1,42 @@
+{
+  "profile": {
+    "name": "Custom Build (Heavy)",
+    "profile_id": "custom_template_heavy",
+    "version": "1.0",
+    "description": "Modular heavy-lift component build — assembled at runtime."
+  },
+  "airframe": {
+    "type": "X8 Coaxial Octocopter",
+    "motor_layout": "Octa-X (coaxial pairs)",
+    "motor_count": 8,
+    "motor_pairs": [
+      ["RCOU.C1", "RCOU.C5"],
+      ["RCOU.C2", "RCOU.C6"],
+      ["RCOU.C3", "RCOU.C7"],
+      ["RCOU.C4", "RCOU.C8"]
+    ],
+    "motors": "T-Motor P80 120KV",
+    "propellers": "22x6.6 inch Carbon Fiber (upper) / 22x7.0 inch Carbon Fiber (lower)",
+    "esc": {
+      "protocol": "DShot600",
+      "amp_rating_continuous": 80
+    }
+  },
+  "thresholds": {
+    "pwm": {
+      "min": 1000,
+      "redline": 2000,
+      "absolute_max": 2000
+    },
+    "motor_imbalance": {
+      "high_threshold_pwm": 1800,
+      "low_threshold_pwm": 1200,
+      "description": "Coaxial opposing pair divergence — one motor above high threshold while its coaxial opposite falls below low threshold indicates the flight controller is fighting a propulsion failure on that arm."
+    }
+  },
+  "context_window": {
+    "rows_before": 20,
+    "rows_after": 20,
+    "description": "±2 seconds at 10 Hz nominal logging rate"
+  }
+}

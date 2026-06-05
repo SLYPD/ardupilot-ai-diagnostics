@@ -1,0 +1,33 @@
+{
+  "flight_controller": {
+    "model": "Hex Cube Orange+",
+    "mcu": "STM32H753",
+    "firmware": "ArduPilot (Copter)",
+    "imu": [
+      { "id": "IMU1", "chip": "Bosch BMI088", "isolated": true },
+      { "id": "IMU2", "chip": "InvenSense ICM-20948", "isolated": false },
+      { "id": "IMU3", "chip": "InvenSense ICM-20649", "isolated": false }
+    ],
+    "barometer": "MS5611 (x2 redundant)",
+    "power_module": "Mauch PL-200 Hall-effect sensor",
+    "telemetry_radio": "RFDesign RFD900x 868MHz"
+  },
+  "power_system": {
+    "vcc": {
+      "description": "Flight controller 5V rail (dual-redundant BEC)",
+      "min_v": 4.8,
+      "max_v": 5.4,
+      "max_fluctuation_v": 0.2
+    }
+  },
+  "thresholds": {
+    "vibration": {
+      "xy_max_m_s2": 45.0,
+      "z_max_m_s2": 60.0
+    },
+    "imu_clipping": {
+      "max_clip_count": 0,
+      "description": "Any VIBE.Clip value greater than 0 indicates mechanical shock or IMU sensor saturation."
+    }
+  }
+}

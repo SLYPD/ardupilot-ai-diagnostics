@@ -1,0 +1,14 @@
+{
+  "timestamp_range": "6.0s — 6.1s",
+  "primary_anomaly": "VIBE_Z_SPIKE",
+  "cited_evidence": [
+    "6.0 VIBE.VibeZ = 50.0",
+    "6.1 VIBE.VibeZ = 55.0",
+    "6.0 VIBE.Clip0 = 3",
+    "6.1 VIBE.Clip0 = 5"
+  ],
+  "root_cause_analysis": "DIAGNOSTIC INCONCLUSIVE: Insufficient data to determine root cause. The vibration spike on the Z-axis (55.0 m/s²) and IMU clipping (Clip0=5) occur at t=6.0–6.1 without any corresponding change in motor outputs (RCOU) or other telemetry variables. While a motor imbalance (C4 at 1970/1985 vs C1 at 1130/1150) was observed earlier at t=4.0–4.1, the vibration spike does not coincide with any output variation, so no causal link can be established. The spike could be due to an external event (e.g., hard landing, propeller strike, or mounting failure) but the data does not provide the necessary correlating evidence to confirm.",
+  "actionable_fix": "Inspect the airframe for physical damage, especially around the IMU mounting. Check propeller 4 for any signs of impact or imbalance. Verify the isolation mount of the Pixhawk 6C Mini. If no damage is found, consider adding a vibration-dampening foam or replacing the mounting pad.",
+  "confidence_score": "Inconclusive",
+  "anomaly_type": "VIBE_Z_SPIKE"
+}

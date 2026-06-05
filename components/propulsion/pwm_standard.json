@@ -1,0 +1,41 @@
+{
+  "profile": {
+    "name": "Custom Build",
+    "profile_id": "custom_template",
+    "version": "1.0",
+    "description": "Modular component build — assembled at runtime."
+  },
+  "airframe": {
+    "type": "Hexacopter",
+    "motor_layout": "Hexa-X",
+    "motor_count": 6,
+    "motor_pairs": [
+      ["RCOU.C1", "RCOU.C4"],
+      ["RCOU.C2", "RCOU.C5"],
+      ["RCOU.C3", "RCOU.C6"]
+    ],
+    "motors": "T-Motor F90 1300KV",
+    "propellers": "7x4 inch Carbon Fiber",
+    "esc": {
+      "protocol": "PWM",
+      "amp_rating_continuous": 45
+    }
+  },
+  "thresholds": {
+    "pwm": {
+      "min": 1000,
+      "redline": 1940,
+      "absolute_max": 2000
+    },
+    "motor_imbalance": {
+      "high_threshold_pwm": 1700,
+      "low_threshold_pwm": 1200,
+      "description": "Opposing motor pair divergence — one motor above high threshold while its opposite falls below low threshold indicates the flight controller is fighting a physical or aerodynamic failure."
+    }
+  },
+  "context_window": {
+    "rows_before": 20,
+    "rows_after": 20,
+    "description": "±2 seconds at 10 Hz nominal logging rate"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(if \\(-not \\(Test-Path \"D:\\\\Just_hobby\\\\docs\"\\)\\) { New-Item -ItemType Directory -Force \"D:\\\\Just_hobby\\\\docs\" } else { Write-Output \"docs/ already exists\" })",
+      "PowerShell(New-Item *)",
+      "PowerShell(python -c \"import py_compile; py_compile.compile\\('D:\\\\Just_hobby\\\\parser.py', doraise=True\\); print\\('parser.py: OK'\\)\"; python -c \"import py_compile; py_compile.compile\\('D:\\\\Just_hobby\\\\main.py', doraise=True\\); print\\('main.py: OK'\\)\")",
+      "PowerShell(python -c \"import py_compile; py_compile.compile\\('D:\\\\Just_hobby\\\\template_builder.py', doraise=True\\); print\\('template_builder.py: OK'\\)\"; python -c \"import py_compile; py_compile.compile\\('D:\\\\Just_hobby\\\\parser.py', doraise=True\\); print\\('parser.py: OK'\\)\"; python -c \"import py_compile; py_compile.compile\\('D:\\\\Just_hobby\\\\main.py', doraise=True\\); print\\('main.py: OK'\\)\")",
+      "PowerShell(python -c \"import py_compile; py_compile.compile\\('D:/Just_hobby/template_builder.py', doraise=True\\); print\\('template_builder.py: OK'\\)\")",
+      "PowerShell(python D:/Just_hobby/template_builder.py --list)",
+      "PowerShell(python D:/Just_hobby/template_builder.py | python -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\('Keys:', list\\(d.keys\\(\\)\\)\\); print\\('Profile name:', d['profile']['name']\\); print\\('VCC min:', d['power_system']['vcc']['min_v']\\); print\\('PWM redline:', d['thresholds']['pwm']['redline']\\); print\\('Motor count:', d['airframe']['motor_count']\\)\")",
+      "PowerShell(python D:/Just_hobby/template_builder.py 2>&1 | Select-Object -First 5)",
+      "PowerShell(python -c \"import py_compile; py_compile.compile\\('D:/Just_hobby/template_builder.py', doraise=True\\); py_compile.compile\\('D:/Just_hobby/parser.py', doraise=True\\); py_compile.compile\\('D:/Just_hobby/main.py', doraise=True\\); print\\('All 3 Python files: compile OK'\\)\")",
+      "PowerShell($env:PYTHONIOENCODING = 'utf-8'; python parser.py --fc pixhawk_6c --power 6s_lipo --propulsion pwm_standard)",
+      "PowerShell(python -c \"from pymavlink import mavutil; print\\('pymavlink import OK'\\); from parser import parse_binary_log; print\\('parse_binary_log import OK'\\)\")",
+      "PowerShell($env:PYTHONIOENCODING = 'utf-8'; python -c \"import requests; r = requests.get\\('http://localhost:8501', timeout=5\\); print\\(f'Streamlit: HTTP {r.status_code}'\\)\")",
+      "PowerShell(python -c \"from parser import parse_binary_log, extract_anomalies; print\\('parser.py imports OK'\\)\")",
+      "PowerShell(python template_builder.py --power 4s_lipo)",
+      "PowerShell(pip install *)",
+      "PowerShell(python -c \"import ast; ast.parse\\(open\\('main.py', encoding='utf-8'\\).read\\(\\)\\); print\\('main.py: OK'\\)\"; python -c \"import ast; ast.parse\\(open\\('app.py', encoding='utf-8'\\).read\\(\\)\\); print\\('app.py: OK'\\)\"; python -c \"import ast; ast.parse\\(open\\('parser.py', encoding='utf-8'\\).read\\(\\)\\); print\\('parser.py: OK'\\)\"; python -c \"import ast; ast.parse\\(open\\('template_builder.py', encoding='utf-8'\\).read\\(\\)\\); print\\('template_builder.py: OK'\\)\")",
+      "PowerShell($env:PYTHONIOENCODING = 'utf-8'; python audit_codebase.py)",
+      "PowerShell(python -c \"from main import format_profile_for_llm, build_system_prompt, call_diagnostic_api, validate_diagnostic_report; print\\('main.py imports OK'\\)\")"
+    ]
+  }
+}

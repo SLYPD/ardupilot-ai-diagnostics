@@ -1,0 +1,18 @@
+{
+  "timestamp_range": "4.0s — 4.1s",
+  "primary_anomaly": "MAX_THRUST_RCOU.C4",
+  "cited_evidence": [
+    "4.0s RCOU.C4 = 1970 (near redline 1940)",
+    "4.0s RCOU.C1 = 1150 (below low threshold 1200)",
+    "4.1s RCOU.C4 = 1985 (exceeds redline)",
+    "4.1s RCOU.C1 = 1130",
+    "4.2s RCOU.C4 = 1530 (returns to normal)",
+    "4.0s-4.1s BAT.Volt = 22.5V (stable, no sag)",
+    "4.0s-4.1s VIBE.X/Y/Z = 5.0/4.0/8.0 (no vibration spike)",
+    "4.0s-4.1s VIBE.Clip0/1/2 = 0 (no IMU clipping)"
+  ],
+  "root_cause_analysis": "DIAGNOSTIC INCONCLUSIVE: Insufficient data to determine root cause. The telemetry shows a brief, isolated motor output imbalance: Motor C4 (opposite of C1) spiked to near redline PWM while C1 dropped correspondingly, indicating the flight controller applied a strong roll compensation. However, the event lasted only 0.2 seconds, vibration levels remained normal, voltage was stable, and all other motors were unaffected. Without correlating evidence such as a sustained imbalance, vibration spikes, voltage sag, or attitude deviation, it is not possible to determine whether the root cause was a transient aerodynamic disturbance (e.g., gust of wind, wake turbulence) or a momentary hardware issue (e.g., intermittent ESC glitch, loose propeller). The rapid return to normal outputs (4.2s) suggests the system self-recovered without persistent hardware failure.",
+  "actionable_fix": "Review pre-flight checks for loose propellers, solder joints, and ESC connections. If the event recurs, inspect Motor 4 and its ESC for intermittent faults. Collect additional high-rate data (e.g., IMU gyro, ESC telemetry) during similar maneuvers to enable a conclusive diagnosis.",
+  "confidence_score": "Inconclusive",
+  "anomaly_type": "MAX_THRUST_RCOU.C4"
+}

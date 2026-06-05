@@ -1,0 +1,14 @@
+{
+  "timestamp_range": "4.0s — 4.1s",
+  "primary_anomaly": "Motor Output Imbalance (C1 low, C4 high)",
+  "cited_evidence": [
+    "4.0s RCOU.C1 = 1150",
+    "4.0s RCOU.C4 = 1970",
+    "4.1s RCOU.C1 = 1130",
+    "4.1s RCOU.C4 = 1985"
+  ],
+  "root_cause_analysis": "DIAGNOSTIC INCONCLUSIVE: Insufficient data to determine root cause.",
+  "actionable_fix": "Inspect motor 1 and motor 4 for mechanical binding, ESC timing issues, and loose connections; review full high-rate IMU/gyro logs for transient disturbances not captured in the provided summary data.",
+  "confidence_score": "Inconclusive",
+  "anomaly_type": "IMBALANCE_RCOU.C1_vs_RCOU.C4"
+}

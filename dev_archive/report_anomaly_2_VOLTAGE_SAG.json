@@ -1,0 +1,15 @@
+{
+  "timestamp_range": "6.0s — 9.9s",
+  "primary_anomaly": "VOLTAGE_SAG",
+  "cited_evidence": [
+    "8.0s BAT.Volt = 19.0 V (severe drop from baseline 22.5 V)",
+    "8.0s BAT.Curr = 50.0 A (sharp increase from baseline 15 A)",
+    "8.1s BAT.Volt = 18.5 V (further drop, lowest recorded)",
+    "8.1s BAT.Curr = 55.0 A (peak current)",
+    "Entire window BAT.Volt = 22.5 V sustained, far below 12S absolute minimum safe threshold of 39.6 V (3.3 V/cell)"
+  ],
+  "root_cause_analysis": "The battery voltage is critically low throughout the window (22.5 V, approximately 1.88 V/cell for a 12S LiPo), well below the 39.6 V minimum safe threshold. At t=8.0s–8.1s, a further voltage sag to 18.5–19.0 V occurs coincident with a current spike from 15 A to 55 A, while motor outputs (RCOU) remain constant at ~1550 PWM. This indicates the battery cannot sustain the constant load due to extreme depletion or cell failure (e.g., high internal resistance, dead cells). The current spike is a direct consequence of the voltage drop as the load attempts to maintain power. No propulsion system anomaly (motor imbalance or increased throttle) triggered the sag; the root cause is a battery-side power delivery failure.",
+  "actionable_fix": "1. Immediately replace the battery pack and retire it from service. 2. Preflight: Verify each cell voltage is above 3.7 V (44.4 V nominal) and within 0.05 V of each other. 3. Inspect power distribution wiring and connectors for signs of overheating or damage. 4. Review battery maintenance logs; a pack reaching 22.5 V indicates severe over-discharge or internal failure.",
+  "confidence_score": "High",
+  "anomaly_type": "VOLTAGE_SAG"
+}

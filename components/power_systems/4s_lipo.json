@@ -1,0 +1,19 @@
+{
+  "power_system": {
+    "battery": {
+      "chemistry": "LiPo",
+      "cell_count": 4,
+      "nominal_voltage_v": 14.8,
+      "max_voltage_v": 16.8,
+      "min_safe_voltage_v": 13.2,
+      "min_safe_cell_voltage_v": 3.3
+    }
+  },
+  "thresholds": {
+    "voltage_sag": {
+      "volt_drop_ratio": 0.95,
+      "current_spike_ratio": 1.5,
+      "description": "BAT.Volt below (median × ratio) coincident with BAT.Curr above (median × ratio) triggers a voltage-sag event."
+    }
+  }
+}
