@@ -1,4 +1,5 @@
 # Hardware & Telemetry Copilot
+[![License: AGPL v3](https://img.shields.io/badge/License-AGPL_v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
 
 Post-mortem diagnostic engine for ArduPilot / MAVLink telemetry logs. The
 pipeline scans flight logs for hardware anomalies — voltage sags, vibration
@@ -124,6 +125,26 @@ python audit_codebase.py
 
 Runs `ruff` (linting) and `vulture` (dead-code detection) across the project.
 
+## Contributing
+
+Contributions are welcome and encouraged — bug fixes, new hardware profiles, 
+parser improvements, UI enhancements.
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/your-feature`)
+3. Commit your changes
+4. Open a pull request with a clear description of what was improved and why
+
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) before submitting.
+
+Note: By contributing, you agree your contributions are licensed under AGPL-3.0.
+
 ## License
 
-MIT
+This project is licensed under the **GNU Affero General Public License v3.0 
+(AGPL-3.0)**. See the [LICENSE](LICENSE) file for full terms.
+
+**For commercial use** (closed-source products, SaaS deployment, or any use 
+that cannot comply with AGPL terms), a separate commercial license is required. 
+Contact: [your-email@example.com]
+
