@@ -16,6 +16,9 @@ build/
 # Linting & tooling
 .ruff_cache/
 
+# Claude Code (harness-managed, session-local)
+.claude/settings.local.json
+
 # OS metadata
 .DS_Store
 Thumbs.db
