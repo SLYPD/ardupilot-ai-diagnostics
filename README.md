@@ -146,5 +146,5 @@ This project is licensed under the **GNU Affero General Public License v3.0
 
 **For commercial use** (closed-source products, SaaS deployment, or any use 
 that cannot comply with AGPL terms), a separate commercial license is required. 
-Contact: [your-email@example.com]
+Contact: dgamingwaytine@gmail.com
 
