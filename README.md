@@ -1,5 +1,6 @@
 # Hardware & Telemetry Copilot
 [![License: AGPL v3](https://img.shields.io/badge/License-AGPL_v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FSLYPD%2Fardupilot-ai-diagnostics.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FSLYPD%2Fardupilot-ai-diagnostics?ref=badge_shield)
 
 Post-mortem diagnostic engine for ArduPilot / MAVLink telemetry logs. The
 pipeline scans flight logs for hardware anomalies — voltage sags, vibration
@@ -148,3 +149,6 @@ This project is licensed under the **GNU Affero General Public License v3.0
 that cannot comply with AGPL terms), a separate commercial license is required. 
 Contact: [your-email@example.com]
 
+
+
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FSLYPD%2Fardupilot-ai-diagnostics.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2FSLYPD%2Fardupilot-ai-diagnostics?ref=badge_large)
