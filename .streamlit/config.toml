@@ -1,0 +1,17 @@
+[server]
+# Maximum upload size in megabytes (500 MB)
+maxUploadSize = 500
+
+# Prevent Streamlit from opening a browser automatically
+headless = false
+
+[browser]
+gatherUsageStats = false
+
+[theme]
+base = "dark"
+primaryColor = "#00BFA6"
+backgroundColor = "#0E1117"
+secondaryBackgroundColor = "#1A1C23"
+textColor = "#EAEAEA"
+font = "sans serif"

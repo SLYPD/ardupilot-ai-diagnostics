@@ -16,7 +16,12 @@
       ["RCOU.C4", "RCOU.C8"]
     ],
     "motors": "T-Motor P80 120KV",
+    "motor_kv": 120,
     "propellers": "22x6.6 inch Carbon Fiber (upper) / 22x7.0 inch Carbon Fiber (lower)",
+    "propeller_size_inches": 22.0,
+    "all_up_weight_g": 15000,
+    "thrust_to_weight_ratio": 3.0,
+    "hover_pwm_typical": 1650,
     "esc": {
       "protocol": "DShot600",
       "amp_rating_continuous": 80
@@ -25,13 +30,16 @@
   "thresholds": {
     "pwm": {
       "min": 1000,
-      "redline": 2000,
+      "redline": 1950,
       "absolute_max": 2000
     },
     "motor_imbalance": {
-      "high_threshold_pwm": 1800,
-      "low_threshold_pwm": 1200,
-      "description": "Coaxial opposing pair divergence — one motor above high threshold while its coaxial opposite falls below low threshold indicates the flight controller is fighting a propulsion failure on that arm."
+      "high_threshold_pwm": 1700,
+      "low_threshold_pwm": 1300,
+      "description": "Coaxial opposing pair divergence — one motor above high threshold while its coaxial opposite falls below low threshold indicates the flight controller is fighting a propulsion failure on that arm. DShot600 noise floor permits tighter gap."
+    },
+    "att_desync": {
+      "max_divergence_deg": 15.0
     }
   },
   "context_window": {

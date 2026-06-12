@@ -18,24 +18,24 @@
     "motor_kv": 1300,
     "propellers": "7x4 inch Carbon Fiber",
     "propeller_size_inches": 7.0,
-    "all_up_weight_g": 3000,
+    "all_up_weight_g": 3500,
     "thrust_to_weight_ratio": 5.0,
     "hover_pwm_typical": 1450,
     "esc": {
-      "protocol": "PWM",
-      "amp_rating_continuous": 45
+      "protocol": "DShot300",
+      "amp_rating_continuous": 55
     }
   },
   "thresholds": {
     "pwm": {
       "min": 1000,
-      "redline": 1940,
+      "redline": 1950,
       "absolute_max": 2000
     },
     "motor_imbalance": {
-      "high_threshold_pwm": 1600,
+      "high_threshold_pwm": 1700,
       "low_threshold_pwm": 1300,
-      "description": "Opposing motor pair divergence — one motor above high threshold while its opposite falls below low threshold indicates the flight controller is fighting a physical or aerodynamic failure. Tightened gap (300 PWM) catches partial failures."
+      "description": "Opposing motor pair divergence — one motor above high threshold while its opposite falls below low threshold. DShot300: lower noise floor allows tighter gap."
     },
     "att_desync": {
       "max_divergence_deg": 15.0
@@ -44,6 +44,6 @@
   "context_window": {
     "rows_before": 20,
     "rows_after": 20,
-    "description": "±2 seconds at 10 Hz nominal logging rate"
+    "description": "+-2 seconds at 10 Hz nominal logging rate"
   }
 }

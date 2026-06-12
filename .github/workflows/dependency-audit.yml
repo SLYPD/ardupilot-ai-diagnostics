@@ -1,0 +1,24 @@
+name: Weekly Dependency Audit
+
+on:
+  schedule:
+    - cron: "37 6 * * 1"  # Every Monday at 6:37 am (off-round to avoid fleet thundering)
+
+jobs:
+  pip-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pip-audit
+
+      - name: Run pip-audit
+        run: python -m pip_audit --requirement requirements.txt

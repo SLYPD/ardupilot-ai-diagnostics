@@ -4,7 +4,11 @@
 # Telemetry log files
 *.bin
 *.tlog
+*.rlog
 *.csv
+
+# Flight log examples (large directory, not for repo)
+Flight Log Examples/
 
 # Python
 __pycache__/
@@ -25,3 +29,15 @@ Thumbs.db
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Diagnostic reports
+report_anomaly_*.json
+
+# Temp files
+temp_flight_*
+temp_detect_*
+temp_uploads/
+
+# Test artifacts
+.pytest_cache/
+

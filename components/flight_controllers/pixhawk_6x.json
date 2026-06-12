@@ -1,0 +1,33 @@
+{
+  "flight_controller": {
+    "model": "Holybro Pixhawk 6X",
+    "mcu": "STM32H753",
+    "firmware": "ArduPilot (Copter)",
+    "imu": [
+      { "id": "IMU1", "chip": "Bosch BMI088", "isolated": true },
+      { "id": "IMU2", "chip": "InvenSense ICM-42688-P", "isolated": false },
+      { "id": "IMU3", "chip": "InvenSense ICM-42688-P", "isolated": false }
+    ],
+    "barometer": "ICP-20100 (x2 redundant)",
+    "power_module": "Holybro PM06 V2",
+    "telemetry_radio": "Holybro SiK Telemetry Radio V3"
+  },
+  "power_system": {
+    "vcc": {
+      "description": "Flight controller 5V rail (dual redundant power supply)",
+      "min_v": 4.9,
+      "max_v": 5.3,
+      "max_fluctuation_v": 0.15
+    }
+  },
+  "thresholds": {
+    "vibration": {
+      "xy_max_m_s2": 35.0,
+      "z_max_m_s2": 50.0
+    },
+    "imu_clipping": {
+      "max_clip_count": 0,
+      "description": "Any VIBE.Clip value greater than 0 indicates mechanical shock or IMU sensor saturation."
+    }
+  }
+}

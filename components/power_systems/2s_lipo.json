@@ -1,0 +1,19 @@
+{
+  "power_system": {
+    "battery": {
+      "chemistry": "LiPo",
+      "cell_count": 2,
+      "nominal_voltage_v": 7.4,
+      "max_voltage_v": 8.4,
+      "min_safe_voltage_v": 6.6,
+      "min_safe_cell_voltage_v": 3.3
+    }
+  },
+  "thresholds": {
+    "voltage_sag": {
+      "volt_drop_ratio": 0.93,
+      "current_spike_ratio": 1.6,
+      "description": "2S LiPo: high internal resistance; sag threshold dialed tighter than mid-count packs."
+    }
+  }
+}

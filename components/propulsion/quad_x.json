@@ -1,0 +1,48 @@
+{
+  "profile": {
+    "name": "Custom Build",
+    "profile_id": "custom_template",
+    "version": "1.0",
+    "description": "Modular component build — assembled at runtime."
+  },
+  "airframe": {
+    "type": "Quadcopter",
+    "motor_layout": "Quad-X",
+    "motor_count": 4,
+    "motor_pairs": [
+      ["RCOU.C1", "RCOU.C3"],
+      ["RCOU.C2", "RCOU.C4"]
+    ],
+    "motors": "Generic 2205 2300KV",
+    "motor_kv": 2300,
+    "propellers": "5x4 inch",
+    "propeller_size_inches": 5.0,
+    "all_up_weight_g": 650,
+    "thrust_to_weight_ratio": 8.0,
+    "hover_pwm_typical": 1350,
+    "esc": {
+      "protocol": "PWM",
+      "amp_rating_continuous": 30
+    }
+  },
+  "thresholds": {
+    "pwm": {
+      "min": 1000,
+      "redline": 1900,
+      "absolute_max": 2000
+    },
+    "motor_imbalance": {
+      "high_threshold_pwm": 1600,
+      "low_threshold_pwm": 1300,
+      "description": "Quadcopter opposing pair divergence — tighter gap for 4-motor configs where any imbalance is critical."
+    },
+    "att_desync": {
+      "max_divergence_deg": 15.0
+    }
+  },
+  "context_window": {
+    "rows_before": 20,
+    "rows_after": 20,
+    "description": "+-2 seconds at 10 Hz nominal logging rate"
+  }
+}

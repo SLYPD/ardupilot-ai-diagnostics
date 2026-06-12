@@ -1,0 +1,19 @@
+{
+  "power_system": {
+    "battery": {
+      "chemistry": "LiPo",
+      "cell_count": 9,
+      "nominal_voltage_v": 33.3,
+      "max_voltage_v": 37.8,
+      "min_safe_voltage_v": 29.7,
+      "min_safe_cell_voltage_v": 3.3
+    }
+  },
+  "thresholds": {
+    "voltage_sag": {
+      "volt_drop_ratio": 0.93,
+      "current_spike_ratio": 1.55,
+      "description": "9S LiPo: higher cell count; total IR increases in series — slightly tighter sag ratio to compensate."
+    }
+  }
+}

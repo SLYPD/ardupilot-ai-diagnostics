@@ -1,0 +1,19 @@
+{
+  "power_system": {
+    "battery": {
+      "chemistry": "LiPo",
+      "cell_count": 10,
+      "nominal_voltage_v": 37.0,
+      "max_voltage_v": 42.0,
+      "min_safe_voltage_v": 33.0,
+      "min_safe_cell_voltage_v": 3.3
+    }
+  },
+  "thresholds": {
+    "voltage_sag": {
+      "volt_drop_ratio": 0.93,
+      "current_spike_ratio": 1.55,
+      "description": "10S LiPo: high cell count for heavy-lift and industrial applications."
+    }
+  }
+}

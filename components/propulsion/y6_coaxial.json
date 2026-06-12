@@ -1,0 +1,49 @@
+{
+  "profile": {
+    "name": "Custom Build",
+    "profile_id": "custom_template",
+    "version": "1.0",
+    "description": "Modular component build — assembled at runtime."
+  },
+  "airframe": {
+    "type": "Y6 Coaxial",
+    "motor_layout": "Y6 (3 arms, coaxial pairs)",
+    "motor_count": 6,
+    "motor_pairs": [
+      ["RCOU.C1", "RCOU.C4"],
+      ["RCOU.C2", "RCOU.C5"],
+      ["RCOU.C3", "RCOU.C6"]
+    ],
+    "motors": "T-Motor MN3510 700KV",
+    "motor_kv": 700,
+    "propellers": "12x4.5 inch (upper CW, lower CCW)",
+    "propeller_size_inches": 12.0,
+    "all_up_weight_g": 5000,
+    "thrust_to_weight_ratio": 4.0,
+    "hover_pwm_typical": 1500,
+    "esc": {
+      "protocol": "DShot600",
+      "amp_rating_continuous": 40
+    }
+  },
+  "thresholds": {
+    "pwm": {
+      "min": 1000,
+      "redline": 1950,
+      "absolute_max": 2000
+    },
+    "motor_imbalance": {
+      "high_threshold_pwm": 1700,
+      "low_threshold_pwm": 1300,
+      "description": "Coaxial pair divergence — upper motor vs lower motor on same arm. Tightened gap for DShot600 noise floor."
+    },
+    "att_desync": {
+      "max_divergence_deg": 15.0
+    }
+  },
+  "context_window": {
+    "rows_before": 20,
+    "rows_after": 20,
+    "description": "+-2 seconds at 10 Hz nominal logging rate"
+  }
+}

@@ -11,14 +11,31 @@ root-cause analysis.
 
 - **Native binary ingestion** — reads ArduPilot `.bin` (Dataflash) and `.tlog`
   (Telemetry) files via pymavlink, in addition to CSV
-- **Modular hardware profiles** — mix-and-match flight controllers, power
-  systems, and propulsion configurations from a JSON component registry
+- **Modular hardware profiles** — mix-and-match **5 flight controllers**, **12
+  battery options (1S–12S)**, and **6 propulsion configurations** from a JSON
+  component registry
+- **9 anomaly detectors** — VCC drop/overvolt, voltage sag, max thrust, motor
+  imbalance, vibration spikes, IMU clipping, ATT desync, VCC fluctuation, and
+  stuck-motor detection
 - **Multi-sensor correlation** — cross-references voltage sag against current
   draw, vibration spikes against motor outputs, and opposing motor-pair imbalance
+  with persistence filtering
 - **LLM-powered diagnostics** — sends context windows to the DeepSeek API for
   structured engineering reports with cited evidence and confidence scores
 - **Streamlit UI** — drag-and-drop file upload, sidebar hardware config, and
-  interactive report cards
+  interactive report cards with security hardening
+- **FastAPI dashboard** — REST API for programmatic log upload and async
+  diagnostic processing
+
+## Scope
+
+**This system is a threshold-based post-mortem scanner for ArduPilot Copter
+multirotors.**  It does NOT support fixed-wing, helicopters, Betaflight, PX4,
+or any firmware other than ArduPilot.
+
+Before using this tool, please read **[PROJECT_SCOPE.md](PROJECT_SCOPE.md)** —
+it defines exactly which aircraft types, battery chemistries, ESC protocols,
+motor configurations, and flight styles are in scope (and which are not).
 
 ## Architecture
 
@@ -61,6 +78,11 @@ cd <repo>
 pip install -r requirements.txt
 ```
 
+For exact reproducible builds, use the lockfile:
+```bash
+pip install -r requirements.lock
+```
+
 ## Usage
 
 ### Streamlit UI
@@ -82,12 +104,35 @@ python main.py
 # Run with specific components
 python main.py --fc cube_orange --power 12s_lipo --propulsion dshot600
 
-# List available components
+# Run with a specific log file
+python main.py --csv path/to/log.bin
+python parser.py --csv path/to/log.tlog
+
+# Batch process a directory of logs
+python main.py --dir logs/
+python parser.py --dir logs/
+
+# List available components (26 total)
 python template_builder.py --list
 
 # Run parser standalone (offline, no API calls)
 python parser.py --fc cube_orange --power 6s_lipo --propulsion pwm_standard
 ```
+
+### FastAPI Dashboard
+
+```bash
+uvicorn api:app --reload --port 8000
+```
+
+Open http://localhost:8000/docs for interactive Swagger documentation.
+
+Endpoints:
+- `GET /health` — liveness check
+- `GET /components` — list all available hardware components
+- `POST /diagnose` — upload a telemetry log + hardware config + API key for async processing
+- `GET /diagnose/{job_id}` — poll for diagnostic results
+- `DELETE /diagnose/{job_id}` — remove a completed/failed job
 
 ## API Key
 
@@ -120,10 +165,15 @@ available via `--power 4s_lipo`.
 ## Code Quality
 
 ```bash
+# Run all tests
+python -m pytest tests/ -v
+
+# Run full audit (ruff + vulture + bandit + pip-audit)
 python audit_codebase.py
 ```
 
-Runs `ruff` (linting) and `vulture` (dead-code detection) across the project.
+**CI:** GitHub Actions runs tests + audit on every push and PR. A weekly
+dependency audit checks for new CVEs every Monday.
 
 ## Contributing
 

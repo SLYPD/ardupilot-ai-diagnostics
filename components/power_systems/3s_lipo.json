@@ -1,0 +1,19 @@
+{
+  "power_system": {
+    "battery": {
+      "chemistry": "LiPo",
+      "cell_count": 3,
+      "nominal_voltage_v": 11.1,
+      "max_voltage_v": 12.6,
+      "min_safe_voltage_v": 9.9,
+      "min_safe_cell_voltage_v": 3.3
+    }
+  },
+  "thresholds": {
+    "voltage_sag": {
+      "volt_drop_ratio": 0.94,
+      "current_spike_ratio": 1.55,
+      "description": "3S LiPo: common in small FPV and survey drones. Moderately aggressive sag detection."
+    }
+  }
+}

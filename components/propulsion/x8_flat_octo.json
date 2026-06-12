@@ -1,0 +1,50 @@
+{
+  "profile": {
+    "name": "Custom Build",
+    "profile_id": "custom_template",
+    "version": "1.0",
+    "description": "Modular component build — assembled at runtime."
+  },
+  "airframe": {
+    "type": "X8 Flat Octocopter",
+    "motor_layout": "Octa-X (flat, 8 independent arms)",
+    "motor_count": 8,
+    "motor_pairs": [
+      ["RCOU.C1", "RCOU.C5"],
+      ["RCOU.C2", "RCOU.C6"],
+      ["RCOU.C3", "RCOU.C7"],
+      ["RCOU.C4", "RCOU.C8"]
+    ],
+    "motors": "T-Motor MN4010 475KV",
+    "motor_kv": 475,
+    "propellers": "15x5 inch",
+    "propeller_size_inches": 15.0,
+    "all_up_weight_g": 8000,
+    "thrust_to_weight_ratio": 3.5,
+    "hover_pwm_typical": 1550,
+    "esc": {
+      "protocol": "DShot600",
+      "amp_rating_continuous": 50
+    }
+  },
+  "thresholds": {
+    "pwm": {
+      "min": 1000,
+      "redline": 1950,
+      "absolute_max": 2000
+    },
+    "motor_imbalance": {
+      "high_threshold_pwm": 1700,
+      "low_threshold_pwm": 1300,
+      "description": "Flat octo opposing pair divergence. DShot600 noise floor permits tighter gap."
+    },
+    "att_desync": {
+      "max_divergence_deg": 15.0
+    }
+  },
+  "context_window": {
+    "rows_before": 20,
+    "rows_after": 20,
+    "description": "+-2 seconds at 10 Hz nominal logging rate"
+  }
+}

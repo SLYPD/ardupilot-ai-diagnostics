@@ -12,10 +12,34 @@ Usage (library):
 
 import json
 import os
+import re
 import sys
 
-
 COMPONENTS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "components")
+
+# Only allow names that are safe to pass directly to os.path.join — no path
+# separators, no parent-directory escapes, no null bytes.
+_SAFE_COMPONENT_NAME_RE = re.compile(r'^[a-zA-Z0-9_][a-zA-Z0-9._-]*$')
+
+
+def _natural_sort_key(name: str) -> list:
+    """Split name into alternating text/number parts for natural sort.
+
+    '10s_lipo' → ['', 10, 's_lipo'] so that 10 sorts after 9 numerically
+    rather than lexicographically ('10' < '9').
+    """
+    return [int(part) if part.isdigit() else part.lower()
+            for part in re.split(r'(\d+)', name)]
+
+
+def _validate_component_name(name: str) -> None:
+    """Raise ValueError if *name* contains characters that could allow path
+    traversal or filesystem escape."""
+    if not _SAFE_COMPONENT_NAME_RE.match(name):
+        raise ValueError(
+            f"Invalid component name '{name}'. "
+            "Use only letters, digits, underscores, hyphens, and dots."
+        )
 
 # Defaults — equivalent to the old pixhawk_6c_mini_6s static profile.
 DEFAULT_FC         = "pixhawk_6c"
@@ -39,6 +63,7 @@ def _load_json(subdir: str, name: str) -> dict:
 
     Returns the parsed dict, or raises FileNotFoundError with a helpful message.
     """
+    _validate_component_name(name)
     filepath = os.path.join(COMPONENTS_DIR, subdir, f"{name}.json")
     if not os.path.exists(filepath):
         available = _list_available(subdir)
@@ -48,7 +73,7 @@ def _load_json(subdir: str, name: str) -> dict:
             + "\n".join(f"  - {a}" for a in available)
             if available else "  (directory is empty or missing)"
         )
-    with open(filepath, "r", encoding="utf-8") as f:
+    with open(filepath, encoding="utf-8") as f:
         return json.load(f)
 
 
@@ -58,9 +83,8 @@ def _list_available(subdir: str) -> list:
     if not os.path.isdir(dirpath):
         return []
     return sorted(
-        os.path.splitext(f)[0]
-        for f in os.listdir(dirpath)
-        if f.endswith(".json")
+        (os.path.splitext(f)[0] for f in os.listdir(dirpath) if f.endswith(".json")),
+        key=_natural_sort_key,
     )
 
 
@@ -145,6 +169,199 @@ def build_profile(fc=None, power=None, propulsion=None) -> dict:
     return profile
 
 
+# --- Auto-Detection ---
+
+# MAV_TYPE → motor-count heuristic (used for .tlog HEARTBEAT)
+_MAVTYPE_MOTOR_COUNT = {
+    2: 4,    # MAV_TYPE_QUADROTOR
+    13: 6,   # MAV_TYPE_HEXAROTOR
+    14: 8,   # MAV_TYPE_OCTOROTOR
+    15: 3,   # MAV_TYPE_TRICOPTER (unsupported but detectable)
+}
+
+# FRAME_CLASS (ArduPilot Copter) → airframe family
+_FRAMECLASS_AIRFRAME = {
+    1: "Plane",
+    2: "Copter",
+    3: "Rover",
+    4: "Sub",
+}
+
+
+def auto_detect_profile(file_path: str) -> dict | None:
+    """Read metadata from an ArduPilot log and suggest matching components.
+
+    Inspects PARM / HEARTBEAT / SYS_STATUS messages to determine:
+        - motor count → closest propulsion profile
+        - battery voltage → closest cell-count power profile
+        - firmware type → validates ArduPilot Copter
+
+    Returns a dict ``{fc, power, propulsion}`` with suggested component
+    names, or None when detection fails (unsupported format, CSV, etc.).
+
+    Does NOT import pymavlink unless the file is a binary format — safe to
+    call unconditionally.
+    """
+    ext = os.path.splitext(file_path)[1].lower()
+    if ext not in ('.bin', '.tlog', '.rlog'):
+        return None  # CSV — nothing to auto-detect
+
+    try:
+        from pymavlink import mavutil
+    except ImportError:
+        return None
+
+    try:
+        mlog = mavutil.mavlink_connection(file_path)
+    except Exception:
+        return None
+
+    motor_count = None
+    max_bat_voltage = None
+    bat_voltage_samples = []
+    firmware_label = None
+
+    try:
+        count = 0
+        while True:
+            try:
+                msg = mlog.recv_match()
+            except Exception:
+                break
+            if msg is None:
+                break
+
+            msg_type = msg.get_type()
+
+            # --- .bin Dataflash ---
+            if msg_type == 'PARM':
+                name = getattr(msg, 'Name', '')
+                val = getattr(msg, 'Value', None)
+                if name == 'FRAME_CLASS' and val is not None:
+                    if int(val) != 2:
+                        # Not ArduPilot Copter — bail out
+                        mlog.close()
+                        airframe = _FRAMECLASS_AIRFRAME.get(int(val), f'type {int(val)}')
+                        print(f"Auto-detect: FRAME_CLASS={int(val)} ({airframe}) — "
+                              "only Copter is supported.  "
+                              "Using default components.")
+                        return None
+                elif name == 'MOT_BAT_VOLT_MAX' and val is not None:
+                    max_bat_voltage = float(val)
+
+            elif msg_type == 'BAT' and motor_count is None:
+                # Accumulate a few voltage samples for cell-count estimation
+                volt = getattr(msg, 'Volt', None)
+                if volt is not None and len(bat_voltage_samples) < 20:
+                    bat_voltage_samples.append(float(volt))
+
+            elif msg_type == 'RCOU' and motor_count is None:
+                # Count non-zero RCOU channels
+                active = 0
+                for i in range(1, 15):
+                    val = getattr(msg, f'C{i}', None)
+                    if val is not None and float(val) > 0:
+                        active = max(active, i)
+                if active > 0:
+                    motor_count = active
+
+            # --- .tlog MAVLink ---
+            elif msg_type == 'HEARTBEAT':
+                autopilot = getattr(msg, 'autopilot', None)
+                mavtype = getattr(msg, 'type', None)
+                if autopilot is not None and autopilot != 3:
+                    mlog.close()
+                    print(f"Auto-detect: MAV_AUTOPILOT={autopilot} — "
+                          "only ArduPilot is supported.  "
+                          "Using default components.")
+                    return None
+                if mavtype is not None and motor_count is None:
+                    motor_count = _MAVTYPE_MOTOR_COUNT.get(int(mavtype))
+
+            elif msg_type == 'AUTOPILOT_VERSION':
+                fw = getattr(msg, 'flight_sw_version', None)
+                if fw is not None:
+                    firmware_label = f"ArduPilot {fw}"
+
+            elif msg_type == 'SYS_STATUS' and len(bat_voltage_samples) < 20:
+                volt = getattr(msg, 'voltage_battery', None)
+                if volt is not None:
+                    bat_voltage_samples.append(float(volt) / 1000.0)
+
+            elif msg_type == 'PARAM_VALUE':
+                pid = getattr(msg, 'param_id', '')
+                if pid:
+                    pid = pid.strip('\x00')
+                if pid == 'FRAME_CLASS':
+                    val = getattr(msg, 'param_value', None)
+                    if val is not None and int(float(val)) != 2:
+                        mlog.close()
+                        print(f"Auto-detect: FRAME_CLASS={int(float(val))} — "
+                              "only Copter is supported.  "
+                              "Using default components.")
+                        return None
+
+            count += 1
+            if count > 200000:
+                break
+
+    finally:
+        if 'mlog' in locals():
+            mlog.close()
+
+    # --- Determine cell count from voltage ---
+    cell_count = None
+    if max_bat_voltage is not None:
+        # Use MOT_BAT_VOLT_MAX parameter (most reliable)
+        cell_count = round(float(max_bat_voltage) / 4.2)
+    elif bat_voltage_samples:
+        # Estimate from first N voltage readings
+        avg_v = sum(bat_voltage_samples) / len(bat_voltage_samples)
+        cell_count = round(avg_v / 3.7)
+    cell_count = max(1, min(12, cell_count or 6))
+
+    # --- Determine motor count ---
+    if motor_count is None:
+        motor_count = 6  # default hexa
+
+    # --- Map motor count → propulsion ---
+    PROPULSION_BY_MOTORS = {
+        4: 'quad_x',
+        6: 'pwm_standard',
+        8: 'x8_flat_octo',
+    }
+    propulsion = PROPULSION_BY_MOTORS.get(motor_count, 'pwm_standard')
+
+    # --- Map cell count → power system ---
+    power = f'{cell_count}s_lipo'
+    # Verify the power profile actually exists
+    available_power = _list_available('power_systems')
+    if power not in available_power:
+        # Find the closest available cell count
+        cell_nums = sorted(
+            [int(n.replace('s_lipo', '')) for n in available_power
+             if n.endswith('s_lipo')]
+        )
+        if cell_nums:
+            closest = min(cell_nums, key=lambda c: abs(c - cell_count))
+            power = f'{closest}s_lipo'
+
+    result = {
+        'fc': DEFAULT_FC,
+        'power': power,
+        'propulsion': propulsion,
+    }
+
+    print(
+        f"Auto-detect: {motor_count}-motor airframe -> '{propulsion}', "
+        f"~{cell_count}S battery -> '{power}', "
+        f"FC -> '{DEFAULT_FC}' (default)"
+        + (f"  [{firmware_label}]" if firmware_label else "")
+    )
+
+    return result
+
+
 # --- CLI ---
 if __name__ == "__main__":
     fc         = DEFAULT_FC
@@ -173,7 +390,7 @@ if __name__ == "__main__":
                     if (cat == "fc" and n == DEFAULT_FC) or \
                        (cat == "power" and n == DEFAULT_POWER) or \
                        (cat == "propulsion" and n == DEFAULT_PROPULSION):
-                        marker = "  (default)"
+                        marker = "  [default]"
                     print(f"    - {n}{marker}")
             sys.exit(0)
         elif args[i] in ("--help", "-h"):
